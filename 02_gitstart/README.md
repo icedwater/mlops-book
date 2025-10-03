@@ -4,6 +4,11 @@ Here is a quick review of the points covered in chapter 2, "Git and GitHub Funda
 
 I've added a few things that weren't in the text.
 
+Here's a [Mermaidjs][mjs] version of [Figure 2.2][fig22].
+
+[mjs]: https://mermaid.js.org/
+[fig]: ./git-workflow.md
+
 ## Basic Git
 
 - **command-line tool**
