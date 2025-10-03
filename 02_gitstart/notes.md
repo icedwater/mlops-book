@@ -56,6 +56,21 @@ Some third-party options are available at [the GUIs page of the official site][g
 
 ## Commands
 
+In the command-line entries below, the following syntax applies:
+
+ - wherever you see `${name}` that means you should substitute your own value where it is necessary.
+ - If any argument is surrounded by square brackets like `[${name}]`, it means that that argument is
+   optional and need not be included.
+ - any text after a hash sign `#` is a comment for your reference and need not be copied.
+
+With any git command, feel free to get help on it by adding `--help` at the end or `help` after `git`:
+```
+git help commit
+git commit --help
+```
+
+Do note that these pages can be pretty wordy, read them carefully.
+
 ### Setup
 
 You will need a username and email address to make commits. The email need not actually work,
@@ -63,12 +78,12 @@ but it is recommended to set a working address if you intend to collaborate with
 
 - Username:
   ```
-  git config --global user.name "this is my name"
+  git config --global user.name ${name} # use quotes for more than one word, e.g. "my name"
   ```
 
 - Email:
   ```
-  git config --global user.email "email-address@provider.com"
+  git config --global user.email ${email} # can use quotes for safety, e.g. "username@email.com"
   ```
 
 ### New Repository
@@ -81,7 +96,7 @@ but it is recommended to set a working address if you intend to collaborate with
 
 - Alternatively, to **clone an existing repository from a remote**:
   ```
-  git clone ${remote_address} [directory name]
+  git clone ${remote_address} [${directory_name}]
   ```
   Here, substitute the actual address after the word `clone`. This remote address can be a URL beginning
   with https://, as above, or some other format. Here, if the directory name is not specified, git tries
@@ -140,6 +155,13 @@ but it is recommended to set a working address if you intend to collaborate with
   ```
 
 ### Swinging between branches
+
+- To switch from one branch to another, `checkout` that branch:
+  ```
+  git checkout ${branch_name}
+  ```
+  You can use other IDs in place of `${branch_name}`, such as specific commit IDs.
+
 [yuck]: https://news.microsoft.com/announcement/microsoft-acquires-github/
 [glab]: https://about.gitlab.com
 [bbkt]: https://bitbucket.org
