@@ -6,8 +6,8 @@ Modularising Python code and building packages which can be used elsewhere, so t
 
 - Building and Managing Virtual Environments
   - managing packages and dependencies
-- Testing Python code using pytest
 - Serialising and deserialising ML Models
+- Testing Python code using pytest
 - Developing, Building, Deploying ML Packages
 
 ## Virtual Environments
@@ -138,9 +138,73 @@ You can do the same thing using `joblib`, which is slightly more convenient:
 import joblib
 from data import students
 
-joblib.dump(students, "stu_data")               # stores `students` into a file called `stu_data`
-students_from_file = joblib.load("stu_data")    # loads the contents of `stu_data` back into an object
+joblib.dump(students, "stu.data")               # stores `students` into `stu.data`
+students_from_file = joblib.load("stu.data")    # loads `stu.data` into `students_from_file`
 
 print(students == students_from_file)
 ```
 The code is provided as `pickle_demo.py`, `joblib_demo.py`, and `data.py` in this folder.
+
+## Testing Python code using pytest
+
+`pytest` is a Python library to run unit tests, i.e., to test small units of code that you have written.
+Other unit testing tools exist, but we will be using just `pytest` here.
+
+Install `pytest` using `pip`, preferably inside a virtual environment for the project:
+```
+pip install pytest
+```
+Once it is installed, and you are inside the package directory, tests can be run with:
+```
+pytest [-v|--verbose]
+```
+Without any arguments, it tries to run any `test_*.py` or `*_test.py` files it can find.
+By default, the test results are summarised:
+- `.` for a passing test,
+- `F` for a failing test,
+- `E` for an unexpected exception
+
+So for 10 tests, if tests 2 and 5 fail, you would see output like:
+```
+.F..F.....
+```
+If `-v` or `--verbose` is supplied, individual test results will be shown in more detail.
+
+### Fixtures
+
+Using the `@pytest.fixture` decorator, we can define functions to be run before each of the test functions.
+Here is an example based on the [official documentation][pytfix]:
+
+```python
+import pytest
+
+class Student:
+    def __init__(self, name, score=0):
+        self.name = name
+        self.score = score
+
+    def reset_score(self):
+        self.score = 0
+
+class Group:
+    def __init__(self, *students):
+        self.students = students
+        self._reset_all_scores()
+    
+    def _reset_all_scores(self):
+        for student in self.students:
+            student.reset_score()
+
+@pytest.fixture
+def testgroup():
+    return [Student(name="Amy", score=20), Student(name="Bob", score=25), Student(name="Cal", score=15)]
+
+def test_reset_group(testgroup):
+    example = Group(*testgroup)
+    assert all(s.score == 0 for s in example.students)
+```
+We introduce the same three students from before, with the same scores, but we test that the `reset_score`
+function works by calling it to reset all their scores, and asserting that their scores are now 0.
+
+
+[pytfix]: https://docs.pytest.org/en/stable/how-to/fixtures.html
